@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign up</title>
+</head>
+
+<body>
+    <h3>REGISTER</h3>
+
+    <form method="POST" action="register">
+        {% csrf_token %}
+
+        {{form.username}}
+
+
+        {{form.email}}
+
+
+        {{form.password1}}
+
+
+        {{form.password2}}
+
+        <input type="submit" name="Submit">
+        {{form.errors}}
+
+        <div>Already have an account <a href="/login">Login</a> </div>
+
+        <script>
+            var form_fields = document.getElementsByTagName('input')
+            form_fields[1].placeholder = 'Username'
+            form_fields[2].placeholder = 'Email'
+            form_fields[3].placeholder = 'Password'
+            form_fields[4].placeholder = 'Confirm Password'
+
+            for (var field in form_fields) {
+                form_fields[field].className += 'form-control'
+            }
+
+        </script>
+    </form>
+</body>
+
+</html>

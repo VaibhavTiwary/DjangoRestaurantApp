@@ -1,0 +1,21 @@
+## Run this below cmd to start a local postgres database instance using docker
+
+docker run \
+    --name restaurant-db \
+    -e POSTGRES_PASSWORD=vaibhav \
+    -e POSTGRES_DB=restr \
+    -e POSTGRES_USER=restr \
+    -p 5432:5432 \
+    -d postgres:16
+
+to start psql in terminal:
+
+sudo docker exec -it restaurant-db psql -U restr
+
+if psql is installed then you can also run:
+install psql using "sudo apt install postgresql-client
+
+psql -h 0.0.0.0 -U restr 
+
+##### To start database -> docker start restaurant-db(database name)
+##### To enter environment variable -> source .venv/bin/activate
