@@ -40,9 +40,13 @@
             color: #fff;
             text-decoration: none;
             padding: 5px 10px;
+            border: 0;
+            font-weight: bold;
+            font-size: 17px;
             border-radius: 5px;
             width: 100px;
             text-align: center;
+
         }
     </style>
 </head>
@@ -68,8 +72,17 @@
     </div>
 
     <p>Total Price: र{{ total_price }}</p>
+
+
+    <form action="{% url 'restr:create-checkout-session'  %}" method="POST">
+        {% csrf_token %}
+        <input type="submit" class="buy-now-button" value="Buy Now" />
+    </form>
     <a href="{% url 'restr:index' %}">Continue Shopping</a>
-    <a href="#" class="buy-now-button">Buy Now</a>
+
+    {% block script %}
+    <script src="https://js.stripe.com/v3/"></script>
+    {% endblock script%}
 
 </body>
 

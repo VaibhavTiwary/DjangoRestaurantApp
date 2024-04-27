@@ -43,6 +43,10 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
+STRIPE_PUBLISHABLE_KEY = os.environ.get("PUBLISHABLE_KEY")
+STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY")
+
+
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",

@@ -8,6 +8,7 @@ from django.contrib.auth import authenticate, login, logout
 from .decorators import unauthenticated_user
 from django.contrib.auth.models import Group
 from .models import Menu, CartItem
+from django.views import generic
 
 
 # Create your views here.
@@ -91,3 +92,59 @@ def loginPage(request):
 def logoutUser(request):
     logout(request)
     return render(request, "restr/ownerLogin.html")
+
+
+import stripe
+from django.conf import settings
+from django.shortcuts import redirect
+from django.views import View
+
+# from .models import Price
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
+
+class CreateStripeCheckoutSessionView(View):
+    def post(self, request, *args, **kwargs):
+        cart_items = CartItem.objects.filter(user=request.user)
+
+        line_items = []
+
+        for item in cart_items:
+            line_items.append(
+                {
+                    "price_data": {
+                        "currency": "inr",
+                        "unit_amount": item.product.price * 100,
+                        "product_data": {
+                            "name": item.product.items,
+                            "description": "placeholder definition for the product",
+                            "images": [
+                                "https://5.imimg.com/data5/TestImages/HT/HC/TC/SELLER-89159197/chhole-bhature-paddler-paper-500x500.jpg"
+                            ],
+                        },
+                    },
+                    "quantity": item.quantity,
+                }
+            )
+
+        checkout_session = stripe.checkout.Session.create(
+            payment_method_types=["card"],
+            line_items=line_items,
+            mode="payment",
+            success_url="http://localhost:8000/success/",
+            cancel_url="http://localhost:8000/cancel/",
+        )
+
+        return redirect(checkout_session.url)
+
+
+from django.views.generic import TemplateView
+
+
+class SuccessView(TemplateView):
+    template_name = "restr/success.html"
+
+
+class CancelView(TemplateView):
+    template_name = "restr/cancel.html"
